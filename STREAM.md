@@ -7,19 +7,19 @@
 - [SKIP] build small CLI tool in Ruby
 - [DONE] build scaffolding or fakers for testing
 - [IN PROGRESS] build the tool
-  - fetch all dashboards data using auth token and dump to STDOUT
-  - fetch all charts and dump to STDOUT
-  - start black/white TUI that takes static text chart and renders it
-  - quit key
-  - auto refresh at intervals
-  - force refresh key
-  - number refresh
-  - table render
-  - config file (read auth key from there)
-  - cache each dash and chart. cache current chart
-  - chart navigation
-  - dash navigation
-  - cache token
+  - [DONE] fetch all dashboards data using auth token and dump to STDOUT
+  - [DONE] fetch all charts and dump to STDOUT
+  - [DONE] start black/white TUI that takes static text chart and renders it
+  - [DONE] quit key
+  - [DONE] auto refresh at intervals
+  - [DONE] force refresh key
+  - [SKIP] number refresh
+  - [DONE] table render
+  - [DONE] config file (read auth key from there)
+  - [DONE] cache each dash and chart. cache current chart
+  - [SKIP] chart navigation
+  - [SKIP] dash navigation
+  - [DONE] cache token
 - [MAYBE?] write tests around the tool
 - clean up the git repo
 
