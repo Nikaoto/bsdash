@@ -10,6 +10,9 @@
 - Run `bsdash --auth-token/-t <auth_token>` to cache the auth token
 - Run `bsdash -s source -d dash_name -c chart_name` to begin
 
+## Caveats
+- **Only works with table charts!**
+- Won't work for projects that have duplicate dashboard names
 
 # Fetching Data
 
@@ -17,7 +20,7 @@
 
 2. Then we obtain jwt token (and keep re-obtaining it time-to-time)
 ```
-GET https://telemetry.betterstack.com/team/<team_id>/tail/cloud-jwt-token
+GET https://telemetry.betterstack.com/team/t<team_id>/tail/cloud-jwt-token
 Cookie: <session_cookie>
 ```
 

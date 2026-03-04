@@ -11,19 +11,12 @@ module API
     end
 
     def fetch_jwt
-      response = Faraday.new(JWT_URL).get("/team/#{@team_id}/tail/cloud-jwt-token") do |req|
-        req.headers["Cookie"] = "_session=" << @session_cookie
+      res = Faraday.new(JWT_URL).get("/team/t#{@team_id}/tail/cloud-jwt-token") do |req|
+        req.headers["Cookie"] = "_session=#{@session_cookie}"
       end
-      raise "Failed to fetch JWT: HTTP #{response.status}" unless response.success?
+      raise "Failed to fetch JWT: HTTP #{res.status}" unless res.success?
 
-      body = response.body.strip
-      # Response may be plain token string or JSON wrapper
-      if body.start_with?("{")
-        data = JSON.parse(body)
-        data["token"] || data["jwt"] || data.values.first
-      else
-        body
-      end
+      JSON.parse(res.body)["tokens"].values.first
     end
   end
 end

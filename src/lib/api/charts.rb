@@ -32,7 +32,7 @@ module API
         req.headers["Content-Type"]  = "text/plain"
       end
 
-      raise "Chart fetch failed: HTTP #{response.status}" unless response.success?
+      raise "Chart fetch failed: HTTP #{response.status} #{response.headers} #{response.body}" unless response.success?
 
       rows = parse_rows(response.body)
       { rows: rows, range_to: range_to }

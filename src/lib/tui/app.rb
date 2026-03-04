@@ -38,7 +38,7 @@ module TUI
 
     private
 
-    # ── Terminal setup / teardown ──────────────────────────────────────────────
+    # Terminal setup / teardown
 
     def setup_terminal
       @raw_io = $stdin
@@ -56,7 +56,7 @@ module TUI
       # stdin may already be closed
     end
 
-    # ── Main loop ──────────────────────────────────────────────────────────────
+    # Main loop
 
     def main_loop
       trap("WINCH") { @redraw = true }
@@ -90,7 +90,7 @@ module TUI
       end
     end
 
-    # ── Fetch ──────────────────────────────────────────────────────────────────
+    # Fetch
 
     def trigger_fetch
       return if @fetching

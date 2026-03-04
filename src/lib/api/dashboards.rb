@@ -20,35 +20,25 @@ module API
 
     def find_dashboard_id(name)
       data = @client.get("/api/v2/dashboards")
-      list = data["data"] || data
+      list = data["data"]
 
-      entry = list.find do |d|
-        attrs = d["attributes"] || d
-        attrs["name"] == name
-      end
+      entry = list.find { |d| d["attributes"]["name"] == name }
       raise "Dashboard '#{name}' not found" unless entry
 
-      entry["id"] || (entry["attributes"] || entry)["id"]
+      entry["id"]
     end
 
     def find_chart_in_export(export, name)
-      # Export structure varies; try common locations
-      charts = export["charts"] ||
-               export["data"]&.flat_map { |d| d["charts"] || [] } ||
-               []
+      charts = export.dig("data", "charts") || []
 
-      chart = charts.find do |c|
-        attrs = c["attributes"] || c
-        attrs["name"] == name
-      end
+      chart = charts.find { |c| c["name"] == name }
       raise "Chart '#{name}' not found in dashboard export" unless chart
 
       chart
     end
 
     def extract_query(chart)
-      attrs = chart["attributes"] || chart
-      attrs["query"] || attrs["sql"] || attrs["query_string"]
+      chart.dig("chart_queries", 0, "sql_query")
     end
   end
 end
