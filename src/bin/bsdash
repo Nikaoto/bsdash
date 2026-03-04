@@ -34,6 +34,10 @@ OptionParser.new do |o|
   o.on("-c", "--chart NAME",       "Chart name")     { |v| opts[:chart]         = v }
 end.parse!
 
+if !config["auth_token"]
+  abort "No auth_token configured. Run with -t <auth_token> to set one."
+end
+
 # Fetch source
 
 if opts[:source]
@@ -43,9 +47,6 @@ if opts[:source]
 elsif !cache.source
   abort "No source configured. Run with -s <name> to set one."
 end
-
-puts cache.source
-exit
 
 source = cache.source
 

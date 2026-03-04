@@ -6,7 +6,10 @@ module API
 
     # Returns { "team_id" => ..., "table_name" => ..., "data_region" => ... }
     def find(name)
-      data = @client.get("/api/v2/sources")
+      data = @client.get("/api/v1/sources")
+      puts JSON.pretty_generate(data)
+      exit 1
+
       list = data["data"] || data
 
       entry = list.find do |s|
