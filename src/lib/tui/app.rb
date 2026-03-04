@@ -110,14 +110,14 @@ module TUI
     def fetch_data
       jwt = fetch_jwt
 
-      api = API::Charts.new(
+      charts_api = API::Charts.new(
         data_region: @source["data_region"],
         team_id:     @source["team_id"],
         table_name:  @source["table_name"],
         jwt_token:   jwt
       )
 
-      result = api.fetch(
+      result = charts_api.fetch(
         query:      @chart["query"],
         range_to:   nil  # always fetch up to now
         # range_from defaults to now-3h inside API::Charts

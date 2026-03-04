@@ -27,18 +27,36 @@ module API
       )
       url = "https://#{@data_region}-connect.betterstackdata.com/"
 
-      response = Faraday.new(url).post("?#{params}", query) do |req|
+      res = Faraday.new(url).post("?#{params}", expand_template(query, range_from: range_from, range_to: range_to)) do |req|
         req.headers["Authorization"] = "Bearer #{@jwt_token}"
         req.headers["Content-Type"]  = "text/plain"
       end
 
-      raise "Chart fetch failed: HTTP #{response.status} #{response.headers} #{response.body}" unless response.success?
+      raise "Chart fetch failed: HTTP #{res.status}" unless res.success?
 
-      rows = parse_rows(response.body)
+      rows = parse_rows(res.body)
       { rows: rows, range_to: range_to }
     end
 
     private
+
+    def expand_template(query, range_from:, range_to:)
+      source_ref = "remote(t#{@team_id}_#{@table_name}_metrics)"
+
+      sql = query.dup
+      sql.gsub!(/\[\[.*?\]\]/m, "")
+      sql.gsub!(/\{\{time\}\}/,                        "toStartOfInterval(dt, INTERVAL '60 second')")
+      sql.gsub!(/\{\{source(?:_with_all_services)?\}\}/, source_ref)
+      sql.gsub!(/\{\{start_time\}\}/,                  clickhouse_time(range_from))
+      sql.gsub!(/\{\{end_time\}\}/,                    clickhouse_time(range_to))
+      sql.rstrip + "\nFORMAT JSONEachRowWithProgress\nSETTINGS max_result_rows = 500000\n"
+    end
+
+    def clickhouse_time(epoch_us)
+      t      = Time.at(epoch_us / 1_000_000.0).utc
+      micros = (epoch_us % 1_000_000).to_s.rjust(6, "0")
+      "toDateTime64('#{t.strftime('%Y-%m-%d %H:%M:%S')}.#{micros}', 6)"
+    end
 
     def parse_rows(body)
       rows = []
@@ -46,7 +64,7 @@ module API
         line = line.strip
         next if line.empty?
         obj = JSON.parse(line)
-        rows << obj unless obj.key?("progress")
+        rows << obj["row"] if obj.key?("row")
       rescue JSON::ParserError
         # skip malformed lines
       end
