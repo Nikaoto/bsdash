@@ -9,16 +9,34 @@
 - Run `bsdash --session-cookie/-C <cookie>` to cache the session cookie
   (it will expire in ~3 months)
 - Run `bsdash -t <auth_token> -s <source> -d <dash_name> -c <chart_name>` to begin.
-  Refer to the images to where to find each field:
+
+  Refer to the images to find each field:
   ![](dash_source_location.png)
   ![](chart_location.png)
   
-- You can simply run `bsdash` to resume the same session
-  (all settings are cached in ~/.config/bsdash/)
+  So, in my case, I would do:
+  ```
+  bsdash -t my_auth_token -s lisisoft-debian-collector -d main -c "Memory usage by service"
+  ```
+  
+- Just run `bsdash` with no flags to see the same chart next time you want to
+  monitor it. (All settings and flags are cached in `~/.config/bsdash/`)
+
+- Want to view a different chart in the same dashboard? Only specify the chart name.
+  ```
+  bsdash -c 'My new chart'
+  ```
+  Everything else was already cached, so you only need to specify what changed.
+
+- Session cookie expired? (Will happen every 3 months!) Just grab a new session cookie from your browser and save it in bsdash:
+  ```
+  bsdash -C session_cookie
+  ```
+  Then running `bsdash` will get you back to where you left off.
 
 ## Caveats
-- Only works with table charts
-- Won't work for projects that have duplicate dashboard names
+- This is a demo, so it only works with table charts.
+- Won't work for projects that have duplicate dashboard names.
 
 # How It Works
 
