@@ -3,6 +3,8 @@ A small dashboard TUI for BetterStack table charts made in ~11 hours.
 
 Here is the full programming stream where I show how I made this live: (https://youtube.com/live/2lS-ACvrxgc?feature=share)[BetterStack Dashboard TUI Programming Stream]
 
+Look at STREAM.md for more notes.
+
 ```
 Usage: bsdash [options]
     -C, --session-cookie COOKIE      Save session cookie and exit
