@@ -28,10 +28,11 @@ OptionParser.new do |o|
     exit
   end
 
-  o.on("-t", "--auth-token TOKEN", "Auth token")     { |v| config["auth_token"] = v }
-  o.on("-s", "--source NAME",      "Source name")    { |v| opts[:source]        = v }
-  o.on("-d", "--dashboard NAME",   "Dashboard name") { |v| opts[:dashboard]     = v }
-  o.on("-c", "--chart NAME",       "Chart name")     { |v| opts[:chart]         = v }
+  o.on("-t", "--auth-token TOKEN",       "Auth token")              { |v| config["auth_token"]       = v }
+  o.on("-r", "--refresh-interval SECS", "Refresh interval (secs)") { |v| config["refresh_interval"] = v.to_i }
+  o.on("-s", "--source NAME",           "Source name")             { |v| opts[:source]               = v }
+  o.on("-d", "--dashboard NAME",        "Dashboard name")          { |v| opts[:dashboard]            = v }
+  o.on("-c", "--chart NAME",            "Chart name")              { |v| opts[:chart]                = v }
 end.parse!
 
 if !config["auth_token"]
@@ -50,20 +51,31 @@ end
 
 source = cache.source
 
-# Fetch dashboard and charts config 
+# Resolve chart identity (dashboard + chart name) from flags or cache
 
 if opts[:dashboard] && opts[:chart]
-  client ||= API::Client.new(auth_token: config["auth_token"])
-  chart_data = API::Dashboards.new(client).find_chart(
-    dashboard_name: opts[:dashboard],
-    chart_name:     opts[:chart]
-  )
-  cache.chart = chart_data
+  cache.chart = { "dashboard_name" => opts[:dashboard], "name" => opts[:chart] }
 elsif !cache.chart
   abort "No chart configured. Run with -d <dashboard> -c <chart> to set one."
 end
 
-chart = cache.chart
+# Always fetch the query fresh so changes in the dashboard are picked up
+
+client ||= API::Client.new(auth_token: config["auth_token"])
+chart = API::Dashboards.new(client).find_chart(
+  dashboard_name: cache.chart["dashboard_name"],
+  chart_name:     cache.chart["name"]
+)
+
+# Persist names + settings but not the query
+cache.chart = {
+  "dashboard_name" => cache.chart["dashboard_name"],
+  "name"           => chart["name"],
+  "settings"       => chart["settings"]
+}
+
+# Pass dashboard_name into the chart hash so the TUI can re-fetch on demand
+chart["dashboard_name"] = cache.chart["dashboard_name"]
 
 # Launch TUI
 

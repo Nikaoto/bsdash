@@ -1,4 +1,25 @@
+# bsdash
+A small dashboard TUI for BetterStack table charts made in ~11 hours.
+
+Here is the full programming stream where I show how I made this live: (https://youtube.com/live/2lS-ACvrxgc?feature=share)[BetterStack Dashboard TUI Programming Stream]
+
+```
+Usage: bsdash [options]
+    -C, --session-cookie COOKIE      Save session cookie and exit
+    -t, --auth-token TOKEN           Auth token
+    -r, --refresh-interval SECS      Refresh interval (seconds)
+    -s, --source NAME                Source name
+    -d, --dashboard NAME             Dashboard name
+    -c, --chart NAME                 Chart name
+    
+    KEYS
+    q    Quit bsdash
+    r    Force refresh (also pulls query/setting changes)
+```
+
 # Setup
+
+Requires ruby, bundle and a BetterStack account and API key.
 
 - `cd src`
 - `bundle install`
@@ -19,8 +40,7 @@
   bsdash -t my_auth_token -s lisisoft-debian-collector -d main -c "Memory usage by service"
   ```
   
-- Just run `bsdash` with no flags to see the same chart next time you want to
-  monitor it. (All settings and flags are cached in `~/.config/bsdash/`)
+- All flags and settings will get cached to `~/.config/bsdash/`, so you can just run `bsdash` with no flags to start monitoring the same chart.
 
 - Want to view a different chart in the same dashboard? Only specify the chart name.
   ```
@@ -75,3 +95,6 @@ Authorization: Bearer <jwt_token>
    (automatic interval or 'r' key press)
 
 9. Rerender on data refresh or window resize
+
+# License
+MIT

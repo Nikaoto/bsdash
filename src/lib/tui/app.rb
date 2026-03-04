@@ -107,6 +107,14 @@ module TUI
     end
 
     def fetch_data
+      fresh = API::Dashboards.new(
+        API::Client.new(auth_token: @config["auth_token"])
+      ).find_chart(
+        dashboard_name: @chart["dashboard_name"],
+        chart_name:     @chart["name"]
+      )
+      @mutex.synchronize { @chart = @chart.merge(fresh) }
+
       jwt = fetch_jwt
 
       charts_api = API::Charts.new(
