@@ -145,7 +145,7 @@ module TUI
       ).fetch_jwt
     end
 
-    # ── Rendering ─────────────────────────────────────────────────────────────
+    # Rendering
 
     def redraw
       rows, last_refresh, fetching, error = @mutex.synchronize do

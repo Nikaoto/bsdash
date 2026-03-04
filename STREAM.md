@@ -1,7 +1,15 @@
 
-# Stream Plan
+# Stream Recap
 
-**Start**: 03 March, 23:51
+- I spent the first 4 hours learning dashboards, the service and the API
+- Then the next 3 hours I spent reverse-engineering the real-time API
+- Did JWT auth (because the public API doesn't provide enough info to display realtime data)
+- I spent an hour learning Ruby's basics
+- Then the next 3 hours were spent building the TUI in Ruby with Claude Code
+  (with heavy code review - no slop on my watch!)
+
+
+## Tasklist
 
 - [DONE] get accustomed to BetterStack and its various tools
 - [SKIP] build small CLI tool in Ruby
@@ -67,7 +75,7 @@ Execution time comparison, 10 samples:
 
 ### (6:29) API defined
 
-## Telemetry dashboard TUI
+## Telemetry dashboard TUI (idea outline)
 
 ### Chart display
 - Flags
@@ -123,7 +131,7 @@ What a bar graph may look like.
 XYZ XYZ XYZ XYZ XYZ XYZ
 ```
 
-## Status page CLI
+## Status page CLI (other idea)
 
 prints out status page on CLI https://niko-company.betteruptime.com/
   - `-w/--watch` flag that refreshes it every 30 seconds
