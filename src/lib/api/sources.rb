@@ -6,19 +6,16 @@ module API
 
     # Returns { "team_id" => ..., "table_name" => ..., "data_region" => ... }
     def find(name)
-      data = @client.get("/api/v1/sources")
-      puts JSON.pretty_generate(data)
-      exit 1
-
-      list = data["data"] || data
+      res = @client.get("/api/v1/sources")
+      list = res["data"]
 
       entry = list.find do |s|
-        attrs = s["attributes"] || s
+        attrs = s["attributes"]
         attrs["name"] == name
       end
       raise "Source '#{name}' not found" unless entry
 
-      attrs = entry["attributes"] || entry
+      attrs = entry["attributes"]
       {
         "team_id"     => attrs["team_id"],
         "table_name"  => attrs["table_name"],

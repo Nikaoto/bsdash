@@ -50,6 +50,9 @@ end
 
 source = cache.source
 
+puts JSON.pretty_generate(source)
+exit 1
+
 
 # Fetch dashboard and charts config 
 
