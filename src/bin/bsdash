@@ -53,9 +53,10 @@ source = cache.source
 
 # Resolve chart identity (dashboard + chart name) from flags or cache
 
-if opts[:dashboard] && opts[:chart]
-  cache.chart = { "dashboard_name" => opts[:dashboard], "name" => opts[:chart] }
-elsif !cache.chart
+cache.chart = (cache.chart || {}).merge("dashboard_name" => opts[:dashboard]) if opts[:dashboard]
+cache.chart = (cache.chart || {}).merge("name"           => opts[:chart])     if opts[:chart]
+
+unless cache.chart&.[]("dashboard_name") && cache.chart&.[]("name")
   abort "No chart configured. Run with -d <dashboard> -c <chart> to set one."
 end
 
