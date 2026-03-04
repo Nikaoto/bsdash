@@ -1,7 +1,7 @@
 # bsdash
 A small dashboard TUI for BetterStack table charts made in ~11 hours.
 
-Here is the full programming stream where I show how I made this live: (https://youtube.com/live/2lS-ACvrxgc?feature=share)[BetterStack Dashboard TUI Programming Stream]
+Here is the full programming stream where I show how I made this live: [BetterStack Dashboard TUI Programming Stream](https://youtube.com/live/2lS-ACvrxgc?feature=share)
 
 Look at STREAM.md for more notes.
 
@@ -14,12 +14,12 @@ Usage: bsdash [options]
     -d, --dashboard NAME             Dashboard name
     -c, --chart NAME                 Chart name
     
-    KEYS
+Keys:
     q    Quit bsdash
     r    Force refresh (also pulls query/setting changes)
 ```
 
-# Setup
+## Setup
 
 Requires ruby, bundle and a BetterStack account and API key.
 
@@ -27,8 +27,8 @@ Requires ruby, bundle and a BetterStack account and API key.
 - `bundle install`
 - Obtain BetterStack session cookie
   - Log into betterstack
-  - Go into DevTools > Application > Cookies and get _session
-  - Double-click the value of _session and copy it
+  - Go into DevTools > Application > Cookies and find `_session`
+  - Double-click the value tothe right of `_session` and copy it
 - Run `bsdash --session-cookie/-C <cookie>` to cache the session cookie
   (it will expire in ~3 months)
 - Run `bsdash -t <auth_token> -s <source> -d <dash_name> -c <chart_name>` to begin.
@@ -52,15 +52,16 @@ Requires ruby, bundle and a BetterStack account and API key.
 
 - Session cookie expired? (Will happen every 3 months!) Just grab a new session cookie from your browser and save it in bsdash:
   ```
-  bsdash -C session_cookie
+  bsdash -C session_cookie   # will exit saying cookie was set
   ```
   Then running `bsdash` will get you back to where you left off.
 
-## Caveats
+### Caveats
 - This is a demo, so it only works with table charts.
-- Won't work for projects that have duplicate dashboard names.
+- Won't work for projects that have duplicate dashboard names or duplicate chart
+  names as both are used to identify them.
 
-# How It Works
+## How It Works
 
 1. First we need the session cookie and the auth token to be set.
 
@@ -98,5 +99,5 @@ Authorization: Bearer <jwt_token>
 
 9. Rerender on data refresh or window resize
 
-# License
+## License
 MIT
