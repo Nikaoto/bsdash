@@ -11,8 +11,9 @@ module API
       chart   = find_chart_in_export(export, chart_name)
 
       {
-        "name"  => chart_name,
-        "query" => extract_query(chart)
+        "name"     => chart_name,
+        "query"    => extract_query(chart),
+        "settings" => chart["settings"] || {}
       }
     end
 

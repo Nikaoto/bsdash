@@ -42,15 +42,14 @@ module TUI
 
     def setup_terminal
       @raw_io = $stdin
-      @raw_io.raw!
+      print "\e[?1049h"   # enter alternate screen
       print @cursor.hide
-      print @cursor.clear_screen
+      @raw_io.raw!
     end
 
     def restore_terminal
       print @cursor.show
-      print @cursor.clear_screen
-      print @cursor.move_to(0, 0)
+      print "\e[?1049l"   # exit alternate screen (restores previous content)
       $stdin.cooked!
     rescue IOError
       # stdin may already be closed
@@ -148,8 +147,7 @@ module TUI
       height = TTY::Screen.height
       output = String.new
 
-      # Move to top-left without clearing (avoids flicker)
-      output << @cursor.move_to(0, 0)
+      output << "\e[2J\e[H"  # clear entire screen + cursor home
 
       # Status bar (line 1)
       output << @status_bar.render(
@@ -165,11 +163,8 @@ module TUI
       elsif rows.nil?
         output << " Loading..."
       else
-        output << @table.render(rows, max_height: height - 1)
+        output << @table.render(rows, max_height: height - 1, settings: @chart["settings"] || {})
       end
-
-      # Clear from cursor to end of screen (removes stale content on resize)
-      output << "\e[J"
 
       print output
       $stdout.flush
