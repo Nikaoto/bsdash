@@ -171,7 +171,7 @@ module TUI
       elsif rows.nil?
         output << " Loading..."
       else
-        output << @table.render(rows, max_height: height - 1, settings: @chart["settings"] || {})
+        output << @table.render(rows, max_height: height - 1, settings: @chart["settings"] || {}).gsub(/\r?\n/, "\r\n")
       end
 
       print output

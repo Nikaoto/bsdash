@@ -1,7 +1,11 @@
 # bsdash
 A small dashboard TUI for BetterStack table charts made in ~11 hours.
 
+![](bsdash-screenshot.png)
+
 Here is the full programming stream where I show how I made this live: [BetterStack Dashboard TUI Programming Stream](https://youtube.com/live/2lS-ACvrxgc?feature=share)
+
+**10:52:24 is when the demo starts.**
 
 Look at STREAM.md for more notes.
 

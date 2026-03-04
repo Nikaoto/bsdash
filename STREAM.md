@@ -27,7 +27,8 @@
 
 ### (3:03) JavaScript transform script
 
-With .reduce can be optimized for simplicity AND memory AND runtime
+The .reduce() based concat can be optimized for simplicity, memory and runtime
+by using a simple for loop.
 
 ```javascript
 async (existingDataByQuery, newDataByQuery, completed) => {
