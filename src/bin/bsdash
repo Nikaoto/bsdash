@@ -1,0 +1,70 @@
+#!/usr/bin/env ruby
+require "bundler/setup"
+require "optparse"
+require "fileutils"
+require "json"
+
+$LOAD_PATH.unshift File.expand_path("../lib", __dir__)
+
+require "config"
+require "cache"
+require "api/client"
+require "api/auth"
+require "api/sources"
+require "api/dashboards"
+require "api/charts"
+require "tui/app"
+
+config = Config.new
+cache  = Cache.new
+opts   = {}
+
+OptionParser.new do |o|
+  o.banner = "Usage: bsdash [options]"
+
+  o.on("-C", "--session-cookie COOKIE", "Save session cookie and exit") do |v|
+    config["session_cookie"] = v
+    puts "Session cookie saved."
+    exit
+  end
+
+  o.on("-t", "--auth-token TOKEN", "Auth token")     { |v| config["auth_token"] = v }
+  o.on("-s", "--source NAME",      "Source name")    { |v| opts[:source]        = v }
+  o.on("-d", "--dashboard NAME",   "Dashboard name") { |v| opts[:dashboard]     = v }
+  o.on("-c", "--chart NAME",       "Chart name")     { |v| opts[:chart]         = v }
+end.parse!
+
+# Fetch source
+
+if opts[:source]
+  client = API::Client.new(auth_token: config["auth_token"])
+  source_data = API::Sources.new(client).find(opts[:source])
+  cache.source = source_data
+elsif !cache.source
+  abort "No source configured. Run with -s <name> to set one."
+end
+
+puts cache.source
+exit
+
+source = cache.source
+
+
+# Fetch dashboard and charts config 
+
+if opts[:dashboard] && opts[:chart]
+  client ||= API::Client.new(auth_token: config["auth_token"])
+  chart_data = API::Dashboards.new(client).find_chart(
+    dashboard_name: opts[:dashboard],
+    chart_name:     opts[:chart]
+  )
+  cache.chart = chart_data
+elsif !cache.chart
+  abort "No chart configured. Run with -d <dashboard> -c <chart> to set one."
+end
+
+chart = cache.chart
+
+# Launch TUI
+
+TUI::App.new(config: config, source: source, chart: chart).run
