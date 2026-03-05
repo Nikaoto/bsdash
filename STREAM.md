@@ -41,7 +41,7 @@ by using a simple for loop.
 ```javascript
 async (existingDataByQuery, newDataByQuery, completed) => {
   for (const key in newDataByQuery)
-    existingDataByQuery[key] = existingDataByQuery[key].concat(newDataByQuery[key])
+    existingDataByQuery[key].push(...newDataByQuery[key])
   return existingDataByQuery
 }
 ```
