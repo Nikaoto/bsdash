@@ -26,11 +26,22 @@ module TUI
         end
 
         data = rows.map do |r|
-          columns.map do |col|
-            raw  = r[col]
-            cell = format_cell(raw, column_units[col])
+          columns.map { |col| format_cell(r[col], column_units[col]) }
+        end
+
+        pct_max_widths = {}
+        pct_columns.each do |col|
+          idx = columns.index(col)
+          next unless idx
+          pct_max_widths[col] = data.map { |row| visible_length(row[idx].to_s) }.max.to_i
+        end
+
+        data = data.each_with_index.map do |row, ri|
+          columns.each_with_index.map do |col, ci|
+            cell = row[ci]
             if pct_columns.include?(col) && col_maxes[col].to_f > 0
-              cell = "#{cell} #{render_bar(raw.to_f / col_maxes[col])}"
+              pad  = pct_max_widths[col] - visible_length(cell)
+              cell = "#{cell}#{' ' * pad} #{render_bar(rows[ri][col].to_f / col_maxes[col])}"
             end
             cell
           end
