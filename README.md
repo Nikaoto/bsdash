@@ -24,7 +24,7 @@ Keys:
     r    Force refresh (also pulls query/setting changes)
 ```
 
-**bsdash** be extended to display bar graphs and other types of charts - the vast
+**bsdash** can be extended to display bar graphs and other types of charts - the vast
 majority of the work was just reliably obtaining the realtime data from
 BetterStack.
 
